@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Bağlı Liste Kodunun Adım Adım Anlatımı</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #f0f8ff, #e6e6fa);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #4b0082;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #8a2be2;
+            border-bottom: 2px solid #9370db;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 1.8em;
+            transition: color 0.3s ease;
+        }
+        h2:hover {
+            color: #ff00ff;
+        }
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #c7254e;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #ff4500;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .note {
+            background: #fffacd;
+            border-left: 5px solid #ffd700;
+            padding: 10px;
+            margin: 10px 0;
+            font-style: italic;
+            color: #556b2f;
+        }
+        .tip {
+            background: #e0ffff;
+            border-left: 5px solid #00bfff;
+            padding: 10px;
+            margin: 10px 0;
+            color: #4682b4;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .dynamic-reveal {
+            cursor: pointer;
+            color: #4169e1;
+            text-decoration: underline;
+        }
+        .hidden-content {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f8ff;
+            border: 1px solid #add8e6;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.dynamic-reveal');
+            reveals.forEach(reveal => {
+                reveal.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    if (content.style.display === 'block') {
+                        content.style.display = 'none';
+                    } else {
+                        content.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>C++ Bağlı Liste Kodunun Adım Adım Anlatımı</h1>
+    <p>Merhaba! Bu HTML sayfası, verdiğin C++ kodunu adım adım, eğlenceli ve anlaşılır bir şekilde anlatmak için tasarlandı. Aşağıya doğru kaydırarak okuyabilirsin. Her bölümde <span class="highlight">vurgular</span> var, kod parçaları renklendirilmiş, ve bazı yerlerde tıklanabilir dinamik içerikler ekledim (örneğin, ekstra açıklamalar için tıkla). Kafana yatacak şekilde basit tuttum: Önce genel bakış, sonra her parçası detaylı. Haydi başlayalım!</p>
+
+    <div class="section">
+        <h2>1. Genel Bakış: Kod Ne Yapıyor?</h2>
+        <p>Bu kod, <span class="highlight">tek yönlü bağlı liste (singly linked list)</span> yapısını kullanarak basit bir program oluşturuyor. Kullanıcıdan sayılar alıp listeye ekliyor, listeyi gösteriyor ve çıkış yapıyor. Menüde arama ve silme seçenekleri var ama kodda henüz uygulanmamış (belki eksik bir kısım). Temel kavramlar: Dinamik bellek yönetimi (<code>malloc</code>), pointer'lar ve struct'lar.</p>
+        <ul>
+            <li><strong>Avantajı:</strong> Liste dinamik büyüyor, sabit boyut yok.</li>
+            <li><strong>Eksiklik:</strong> Arama ('a') ve silme ('s') menüde var ama switch'te yok. Belki sen ekleyeceksin!</li>
+        </ul>
+        <div class="tip">İpucu: Bağlı listeler, veri ekleme/silme için verimli ama rastgele erişim yavaş.</div>
+    </div>
+
+    <div class="section">
+        <h2>2. Başlangıç: Header'lar ve Using</h2>
+        <pre><code>#include &lt;iostream&gt;  // cout, cin için
+#include &lt;cstdlib&gt;   // malloc, free, exit için
+using namespace std;</code></pre>
+        <p>Burada iki kütüphane dahil ediyoruz:</p>
+        <ul>
+            <li><code>&lt;iostream&gt;</code>: Giriş/çıkış için <code>cout</code> ve <code>cin</code> gibi fonksiyonlar sağlar. <span class="dynamic-reveal">Neden önemli? (Tıkla)</span>
+                <div class="hidden-content">Çünkü kullanıcıyla etkileşim için temel. Yoksa komut satırı programı olmaz!</div>
+            </li>
+            <li><code>&lt;cstdlib&gt;</code>: Dinamik bellek için <code>malloc</code>, <code>free</code> ve çıkış için <code>exit</code>. C'den gelen fonksiyonlar, C++'ta da kullanılır.</li>
+        </ul>
+        <p><code>using namespace std;</code>: Standart isim alanını kullanır, böylece her seferinde <code>std::</code> yazmazsın. Ama büyük projelerde dikkatli ol, isim çakışması olabilir.</p>
+        <div class="note">Not: Modern C++'ta <code>new</code> ve <code>delete</code> tercih edilir, ama burada eski usul <code>malloc</code> kullanılmış.</div>
+    </div>
+
+    <div class="section">
+        <h2>3. Struct Tanımı: Liste Yapısı</h2>
+        <pre><code>struct Liste {
+    int numara;       // düğümün içinde saklanacak sayı
+    Liste* sonraki;   // bir sonraki düğümün adresini tutar
+};</code></pre>
+        <p>Bu, listenin temel yapı taşı: Bir <span class="highlight">düğüm (node)</span>. İçinde:</p>
+        <ul>
+            <li><code>int numara</code>: Saklanacak veri (sayı).</li>
+            <li><code>Liste* sonraki</code>: Bir sonraki düğümün pointer'ı. Zincir böyle oluşur!</li>
+        </ul>
+        <p>Düşün: Her düğüm bir kutu, içinde sayı ve bir ok (pointer) var, ok bir sonraki kutuyu gösterir. Sonuncunun oku <code>nullptr</code>.</p>
+        <div class="tip">İpucu: Bu tek yönlü, yani sadece ileri gidilir. Çift yönlü olsa <code>onceki</code> de olurdu.</div>
+    </div>
+
+    <div class="section">
+        <h2>4. Global Pointer'lar: ilk ve son</h2>
+        <pre><code>Liste* ilk = nullptr;  // listenin ilk düğümü
+Liste* son = nullptr;  // listenin son düğümü</code></pre>
+        <p>Liste boş başlıyor, yani <code>ilk</code> ve <code>son</code> null. <code>ilk</code> başı, <code>son</code> kuyruğu tutar. Neden iki tane? Ekleme hızlı olsun diye (O(1) zaman).</p>
+        <div class="note">Not: Global olmaları basitlik için, ama büyük kodlarda sınıf içinde tutmak更好.</div>
+    </div>
+
+    <div class="section">
+        <h2>5. Yeni Düğüm Oluştur: Bilgi_Al Fonksiyonu</h2>
+        <pre><code>Liste* Bilgi_Al(int num) {
+    Liste* Bilgi = (Liste*)malloc(sizeof(Liste));  // Bellekte yer aç
+    if (Bilgi == nullptr) return nullptr;         // Bellek yoksa NULL döndür
+    Bilgi-&gt;numara = num;      // num değerini düğüme ata
+    Bilgi-&gt;sonraki = nullptr; // Henüz bağlantı yok
+    return Bilgi;             // Düğümün adresini geri gönder
+}</code></pre>
+        <p>Adım adım:</p>
+        <ol>
+            <li><code>malloc</code> ile bellek ayır: Yeni düğüm için yer aç.</li>
+            <li>Kontrol: Eğer bellek yoksa (<code>nullptr</code>), hata dön.</li>
+            <li>Veriyi ata: <code>numara = num</code>.</li>
+            <li><code>sonraki = nullptr</code>: Yeni düğüm yalnız.</li>
+            <li>Adresi dön: Kullanmak için.</li>
+        </ol>
+        <p><span class="highlight">Vurgu:</span> <code>(Liste*)</code> cast, malloc void* döner diye. Hata kontrolü iyi!</p>
+        <div class="dynamic-reveal">Ekstra: Neden malloc? (Tıkla)</div>
+        <div class="hidden-content">Çünkü dinamik, runtime'da büyüyor. Statik array gibi değil.</div>
+    </div>
+
+    <div class="section">
+        <h2>6. Listeye Ekle: Ekle Fonksiyonu</h2>
+        <pre><code>void Ekle(Liste* bilgi) {
+    if (bilgi == nullptr) {
+        cout &lt;&lt; "Bellek dolu, ekleme yapılamaz" &lt;&lt; endl;
+        return; // break yerine return
+    }
+    if (ilk == nullptr) {  // liste boşsa
+        ilk = bilgi;
+        son = ilk;
+    } else {               // liste boş değilse
+        son-&gt;sonraki = bilgi; // eski sonun sonraki pointer'ı yeni düğümü tutar
+        son = bilgi;          // yeni düğüm artık son
+    }
+}</code></pre>
+        <p>Bu fonksiyon yeni düğümü sona ekler:</p>
+        <ul>
+            <li>Hata kontrolü: Eğer <code>bilgi</code> null'sa, mesaj ver ve çık.</li>
+            <li>Liste boş mu? Evetse, <code>ilk</code> ve <code>son</code> yeni düğüme eşit.</li>
+            <li>Değilse: Eski sonun <code>sonraki</code>'sini yeni'ye bağla, <code>son</code>'u güncelle.</li>
+        </ul>
+        <p><span class="highlight">Güzel kısım:</span> Sona ekleme O(1), çünkü <code>son</code> pointer'ı var. Yoksa baştan taramak gerekirdi.</p>
+        <div class="note">Not: Burada <code>break</code> yerine <code>return</code> demişsin, doğru, void fonksiyon.</div>
+    </div>
+
+    <div class="section">
+        <h2>7. Listeyi Yazdır: Listele Fonksiyonu</h2>
+        <pre><code>void Listele() {
+    Liste* gecici = ilk;
+    if (gecici == nullptr) {
+        cout &lt;&lt; "Liste bos." &lt;&lt; endl;
+        return;
+    }
+    cout &lt;&lt; "Liste: ";
+    while (gecici != nullptr) {
+        cout &lt;&lt; gecici-&gt;numara &lt;&lt; " ";
+        gecici = gecici-&gt;sonraki;
+    }
+    cout &lt;&lt; endl;
+}</code></pre>
+        <p>Basit traversal (dolaşma):</p>
+        <ol>
+            <li><code>gecici = ilk</code>: Baştan başla.</li>
+            <li>Boş mu? Mesaj ver.</li>
+            <li>While loop: Her düğümü yaz, <code>sonraki</code> ile ilerle.</li>
+        </ol>
+        <p><span class="highlight">Vurgu:</span> Null'a ulaşınca dur, yoksa sonsuz döngü!</p>
+    </div>
+
+    <div class="section">
+        <h2>8. Ana Fonksiyon: main()</h2>
+        <pre><code>int main() {
+    Liste* Bilgi;  // yeni düğümü tutacak pointer
+    Liste* bul;    // aranan düğümü tutacak pointer
+    char secim;    // menü seçim karakteri
+    int numara;    // kullanıcıdan alınacak sayı
+
+    while (true) {
+        cout &lt;&lt; "\nEkleme (e)\nListeleme (l)\nArama (a)\nSilme (s)\nCikis (c)\nSecim? ";
+        cin &gt;&gt; secim;
+
+        switch (secim) {
+            case 'e':
+                cout &lt;&lt; "Numarayi giriniz: ";
+                cin &gt;&gt; numara;
+                Bilgi = Bilgi_Al(numara); // yeni düğüm oluştur
+                Ekle(Bilgi);              // listeye ekle
+                break;
+
+            case 'l':
+                Listele();  // listeyi göster
+                break;
+
+            case 'c':
+                exit(0);    // programı kapat
+                break;
+
+            default:
+                cout &lt;&lt; "Gecersiz secim!" &lt;&lt; endl;
+        }
+    }
+
+    return 0;
+}</code></pre>
+        <p>Sonsuz döngüde menü:</p>
+        <ul>
+            <li>Kullanıcı seçim yapar.</li>
+            <li>Switch: 'e' için ekle, 'l' için listele, 'c' için çık.</li>
+            <li>'a' ve 's' menüde var ama switch'te yok – <span class="highlight">eksik implementasyon</span>. Default'a düşer.</li>
+        </ul>
+        <p><code>Liste* bul;</code> tanımlı ama kullanılmıyor, muhtemelen arama için planlanmış.</p>
+        <div class="tip">İpucu: Çıkış için <code>exit(0)</code>, ama bellek temizlemiyor (leak var). Gerçek kodda free et!</div>
+        <div class="dynamic-reveal">Nasıl çalıştırılır? (Tıkla)</div>
+        <div class="hidden-content">Derle (g++ dosya.cpp), çalıştır. Menüden 'e' ile sayı ekle, 'l' ile gör, 'c' ile çık.</div>
+    </div>
+
+    <div class="section">
+        <h2>Sonuç: Ne Öğrendik?</h2>
+        <p>Bu kod, bağlı listelerin temelini gösteriyor: Oluşturma, ekleme, listeleme. Eksik kısımlar (arama, silme) ekleyebilirsin. Umarım kafana yattı – dinamik bellek ve pointer'lar eğlenceli ama dikkatli ol! Soru sorabilirsin.</p>
+    </div>
+</body>
+</html>
