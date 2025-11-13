@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ Bağlı Liste (Sınav Özeti)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    pre {
+      background: #1e1e2f;
+      color: #c9d1d9;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    code { color: #93c5fd; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-600 to-purple-800 min-h-screen text-white flex flex-col items-center p-6">
+
+  <h1 class="text-2xl font-bold mb-4 text-center">📘 C++ Bağlı Liste Kodu (Sınav Özeti)</h1>
+
+  <div class="bg-white/10 backdrop-blur-lg p-6 rounded-2xl max-w-3xl shadow-xl">
+    <h2 class="text-xl font-semibold mb-3 text-indigo-200">📄 Kod:</h2>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+using namespace std;
+
+struct Liste {
+    int numara;
+    Liste* sonraki;
+};
+
+Liste* ilk = nullptr;
+Liste* son = nullptr;
+
+Liste* Bilgi_Al(int num) {
+    Liste* Bilgi = (Liste*)malloc(sizeof(Liste));
+    if (Bilgi == nullptr) return nullptr;
+    Bilgi-&gt;numara = num;
+    Bilgi-&gt;sonraki = nullptr;
+    return Bilgi;
+}
+
+void Ekle(Liste* bilgi) {
+    if (bilgi == nullptr) {
+        cout &lt;&lt; "Bellek dolu, ekleme yapılamaz" &lt;&lt; endl;
+        return;
+    }
+    if (ilk == nullptr) {
+        ilk = bilgi;
+        son = ilk;
+    } else {
+        son-&gt;sonraki = bilgi;
+        son = bilgi;
+    }
+}
+
+void Listele() {
+    Liste* gecici = ilk;
+    if (gecici == nullptr) {
+        cout &lt;&lt; "Liste bos." &lt;&lt; endl;
+        return;
+    }
+    cout &lt;&lt; "Liste: ";
+    while (gecici != nullptr) {
+        cout &lt;&lt; gecici-&gt;numara &lt;&lt; " ";
+        gecici = gecici-&gt;sonraki;
+    }
+    cout &lt;&lt; endl;
+}
+
+int main() {
+    Liste* Bilgi;
+    char secim;
+    int numara;
+
+    while (true) {
+        cout &lt;&lt; "\nEkleme (e)\nListeleme (l)\nCikis (c)\nSecim? ";
+        cin &gt;&gt; secim;
+
+        switch (secim) {
+            case 'e':
+                cout &lt;&lt; "Numarayi giriniz: ";
+                cin &gt;&gt; numara;
+                Bilgi = Bilgi_Al(numara);
+                Ekle(Bilgi);
+                break;
+            case 'l':
+                Listele();
+                break;
+            case 'c':
+                exit(0);
+            default:
+                cout &lt;&lt; "Gecersiz secim!" &lt;&lt; endl;
+        }
+    }
+    return 0;
+}</code></pre>
+  </div>
+
+  <div class="max-w-3xl mt-8 bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl">
+    <h2 class="text-xl font-semibold mb-3 text-indigo-200">🧠 Önemli Noktalar (Sınav İçin)</h2>
+    <ul class="list-disc list-inside space-y-2 text-indigo-100 text-sm">
+      <li><b>struct Liste</b>: Düğümleri tanımlar (numara + sonraki adresi).</li>
+      <li><b>ilk</b> ve <b>son</b>: Listenin başlangıç ve bitiş adreslerini tutar.</li>
+      <li><b>Bilgi_Al()</b>: Dinamik bellekten yeni düğüm oluşturur.</li>
+      <li><b>Ekle()</b>: Yeni düğümü listenin sonuna ekler.</li>
+      <li><b>Listele()</b>: Listedeki tüm düğümleri sırayla ekrana yazar.</li>
+      <li><b>malloc</b>: Dinamik bellek ayırmak için kullanılır (C tarzı).</li>
+      <li><b>exit(0)</b>: Programı sonlandırır.</li>
+      <li><b>cin/cout</b>: Kullanıcıdan giriş alır ve ekrana yazar.</li>
+      <li><b>if (ilk == nullptr)</b>: Liste boş mu diye kontrol eder.</li>
+    </ul>
+  </div>
+
+  <p class="mt-8 text-sm text-indigo-200 text-center">
+    💡 Bu sayfayı doğrudan GitHub Pages'te açtığında <br> sınav öncesi özetini her yerden görebilirsin.
+  </p>
+
+</body>
+</html>
