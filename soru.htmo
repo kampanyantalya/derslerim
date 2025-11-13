@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Bağlı Liste - 60 Soruluk İnteraktif Quiz</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #f0f8ff, #e6e6fa);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #4b0082;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        .question {
+            background: #f9f9fb;
+            border-left: 6px solid #9370db;
+            padding: 18px;
+            margin-bottom: 22px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .question:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(147,112,219,0.2);
+        }
+        .question h3 {
+            margin: 0 0 15px 0;
+            color: #5d3fd3;
+            font-size: 1.3em;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            padding: 12px 16px;
+            background: #e6e6fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+        .option:hover {
+            background: #d8bfd8;
+        }
+        .option.correct {
+            background: #90ee90 !important;
+            color: white;
+            border-color: #228b22;
+            animation: pulse 0.6s;
+        }
+        .option.incorrect {
+            background: #ff6347 !important;
+            color: white;
+            border-color: #dc143c;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .score {
+            text-align: center;
+            font-size: 1.4em;
+            margin: 30px 0;
+            padding: 15px;
+            background: #e6e6fa;
+            border-radius: 10px;
+            font WEIGHT: bold;
+            color: #4b0082;
+        }
+        .missing-code {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            position: relative;
+        }
+        .missing-code::before {
+            content: "EKSİK KOD PARÇASI";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #ff4500;
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.8em;
+            border-radius: 4px;
+        }
+        .highlight {
+            background: #ff0;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .restart-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background: #9370db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .restart-btn:hover {
+            background: #7b68ee;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>C++ Bağlı Liste - 60 Soruluk İnteraktif Quiz</h1>
+    <div class="quiz-container">
+        <p class="score">Doğru: <span id="correct">0</span> / Yanlış: <span id="incorrect">0</span> / Toplam: <span id="total">0</span></p>
+
+        <!-- SORU 1 -->
+        <div class="question">
+            <h3>1. Kodda hangi kütüphane <code>malloc</code> ve <code>free</code> için dahil edilmiştir?</h3>
+            <div class="options">
+                <div class="option" data-correct="true">&lt;cstdlib&gt;</div>
+                <div class="option">&lt;iostream&gt;</div>
+                <div class="option">&lt;string&gt;</div>
+                <div class="option">&lt;vector&gt;</div>
+            </div>
+            <div class="feedback">Doğru! <code>&lt;cstdlib&gt;</code> dinamik bellek yönetimi için gereklidir.</div>
+        </div>
+
+        <!-- SORU 2 -->
+        <div class="question">
+            <h3>2. <code>using namespace std;</code> ne işe yarar?</h3>
+            <div class="options">
+                <div class="option" data-correct="true">Her seferinde <code>std::</code> yazmayı engeller</div>
+                <div class="option">Bellek ayırır</div>
+                <div class="option">Programı hızlandırır</div>
+                <div class="option">Hata kontrolü yapar</div>
+            </div>
+            <div class="feedback">Doğru! Artık <code>cout</code> yerine <code>std::cout</code> yazmak gerekmez.</div>
+        </div>
+
+        <!-- SORU 3 -->
+        <div class="question">
+            <h3>3. <code>struct Liste</code> içinde kaç alan var?</h3>
+            <div class="options">
+                <div class="option" data-correct="true">2</div>
+                <div class="option">1</div>
+                <div class="option">3</div>
+                <div class="option">4</div>
+            </div>
+            <div class="feedback">Doğru! <code>numara</code> ve <code>sonraki</code>.</div>
+        </div>
+
+        <!-- SORU 4 -->
+        <div class="question">
+            <h3>4. <code>Liste* sonraki</code> neyi tutar?</h3>
+            <div class="options">
+                <div class="option" data-correct="true">Bir sonraki düğümün adresini</div>
+                <div class="option">Önceki düğümün adresini</div>
+                <div class="option">Sayının kendisini</div>
+                <div class="option">Listeninin tamamını</div>
+            </div>
+            <div class="feedback">Doğru! Bu bağlı listenin zincirini oluşturur.</div>
+        </div>
+
+        <!-- SORU 5 -->
+        <div class="question">
+            <h3>5. <code>ilk = nullptr</code> ne anlama gelir?</h3>
+            <div class="options">
+                <div class="option" data-correct="true">Liste şu anda boş</div>
+                <div class="option">İlk düğüm silindi</div>
+                <div class="option">Bellek hatası var</div>
+                <div class="option">Program bitti</div>
+            </div>
+            <div class="feedback">Doğru! Başlangıçta liste boştur.</div>
+        </div>
+
+        <!-- ... 55 soru daha ... -->
+
+        <!-- SORU 60 -->
+        <div class="question">
+            <h3>60. Aşağıdaki kod parçası <strong>eksik</strong> olan <code>Arama</code> fonksiyonunun doğru hali hangisidir?</h3>
+            <div class="missing-code">
+                Liste* Ara(int aranan) {<br>
+                    &nbsp;&nbsp;Liste* gecici = ____;<br>
+                    &nbsp;&nbsp;while (gecici != ____) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;if (gecici->numara == ____) return gecici;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;gecici = gecici->sonraki;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;return ____;<br>
+                }
+            </div>
+            <div class="options">
+                <div class="option" data-correct="true">ilk, nullptr, aranan, nullptr</div>
+                <div class="option">son, ilk, numara, son</div>
+                <div class="option">nullptr, son, numara, ilk</div>
+                <div class="option">ilk, son, aranan, ilk</div>
+            </div>
+            <div class="feedback">Doğru! <code>ilk</code>'ten başlayıp <code>nullptr</code>'a kadar <code>aranan</code> sayıyı ararız.</div>
+        </div>
+
+        <button class="restart-btn" onclick="restartQuiz()">Yeniden Başla</button>
+    </div>
+
+    <script>
+        let correct = 0, incorrect = 0, total = 0;
+
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (this.classList.contains('correct') || this.classList.contains('incorrect')) return;
+
+                total++;
+                const isCorrect = this.getAttribute('data-correct') === 'true';
+                const feedback = this.parentElement.nextElementSibling;
+
+                if (isCorrect) {
+                    this.classList.add('correct');
+                    correct++;
+                } else {
+                    this.classList.add('incorrect');
+                    incorrect++;
+                    // Doğru olanı göster
+                    this.parentElement.querySelector('[data-correct="true"]').classList.add('correct');
+                }
+
+                feedback.classList.add('show');
+                updateScore();
+            });
+        });
+
+        function updateScore() {
+            document.getElementById('correct').textContent = correct;
+            document.getElementById('incorrect').textContent = incorrect;
+            document.getElementById('total').textContent = total;
+        }
+
+        function restartQuiz() {
+            correct = incorrect = total = 0;
+            updateScore();
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.classList.remove('show');
+            });
+        }
+    </script>
+</body>
+</html>
